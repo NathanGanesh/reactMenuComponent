@@ -4,27 +4,43 @@ import Categories from './Categories';
 import items from './data';
 
 function App() {
-	let categories = [];
+	const [ itemsArray, setItems ] = React.useState(items);
 
+	// setItems(items);
+
+	let categories = [];
+	categories.push('all');
 	items.map((item) => {
 		if (categories.indexOf(item.category) === -1) {
 			categories.push(item.category);
 		}
 	});
 
-	console.log(categories);
+	const handleCategoryChange = (category) => {
+		// console.log(item);
+		const newItems = items.filter((item) => {
+			return item.category === category.target.value;
+		});
+
+		// console.log(newItems);
+		setItems(newItems);
+
+		if (category.target.value === 'all') {
+			setItems(items);
+		}
+	};
 
 	return (
-		<main>
+		<main className="main">
 			<h2>Our Menu</h2>
 			<div className="underline" />
-			<div>
-				{items.map((item) => {
-					return <Categories key={item.id} category={categories} />;
+			<div className="category-bar">
+				{categories.map((item) => {
+					return <Categories category={item} handleCategoryChange={handleCategoryChange} />;
 				})}
 			</div>
-			<div>
-				{items.map((item) => {
+			<div className="menu-grid">
+				{itemsArray.map((item) => {
 					return <Menu key={item.id} {...item} />;
 				})}
 			</div>
